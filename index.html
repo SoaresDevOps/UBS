@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Senha|Servidor</title>
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <form id="formulario">
+            <div class="form-group">
+                <label for="sala">Sala:</label>
+                <select class="form-control" id="sala" name="sala" required>
+                    <option value="" disabled selected>Selecione a Sala</option>
+                    <option value="Sala de Ultrasson 1">Sala de Ultrasson 1</option>
+                    <option value="Consultorio G.O 2">Consultorio G.O 2</option>
+                    <option value="Consultorio Clinico 2">Consultorio Clinico 2</option>
+                    <option value="Consultorio Pediatria 3">Consultorio Pediatria 3</option>
+                    <option value="Pré Consulta">Pré Consulta</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="senha">Senha:</label>
+                <input type="text" class="form-control" id="senha" name="senha" required>
+            </div>
+            <div class="form-group">
+                <label for="dr">Dr(a):</label>
+                <select class="form-control" id="dr" name="dr" required>
+                    <option value="" disabled selected>Selecione o Dr(a)</option>
+                    <option value="Jane">Jane</option>
+                    <option value="Luanna">Luanna</option>
+                    <option value="Osmair">Osmair</option>
+                    <option value="Amanda">Amanda</option>
+                    <option value="Arthur">Arthur</option>
+                    <option value="Andreia">Andreia</option>
+                    <option value="Fernando Viola">Fernando Viola</option>
+                    <option value=" "> </option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-custom">Enviar</button>
+            <button id="reiniciarCampos" type="button" class="btn btn-custom">Reiniciar Campos</button>
+            <p><strong>Por-Favor, não esqueça de preencher tudo certo</strong></p>
+        </form>
+    </div>
+
+    <!-- Firebase App -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-analytics.js";
+        import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-database.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAhDIHl443t9KNOXVY-E2uMy7cIq7JCsKI",
+            authDomain: "posto-de-saude-42845.firebaseapp.com",
+            projectId: "posto-de-saude-42845",
+            storageBucket: "posto-de-saude-42845.appspot.com",
+            messagingSenderId: "414153607163",
+            appId: "1:414153607163:web:34eb3c8199f70678786d5e",
+            measurementId: "G-3WVR8L3X7D"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const database = getDatabase(app);
+
+        document.getElementById('formulario').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const sala = document.getElementById('sala').value;
+            const senha = document.getElementById('senha').value;
+            const dr = document.getElementById('dr').value;
+
+            const dados = { sala, senha, dr };
+
+            // Envia os dados para o Firebase Realtime Database
+            const newRef = ref(database, 'senhas/' + Date.now());
+            set(newRef, dados)
+                .then(() => console.log('Dados enviados com sucesso'))
+                .catch((error) => console.error('Erro ao enviar dados:', error));
+        });
+
+        document.getElementById('reiniciarCampos').addEventListener('click', function() {
+            document.getElementById('sala').selectedIndex = 0;
+            document.getElementById('senha').value = '';
+            document.getElementById('dr').selectedIndex = 0;
+        });
+    </script>
+</body>
+</html>
