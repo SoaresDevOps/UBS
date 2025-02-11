@@ -1,3 +1,53 @@
+/* Estilos Gerais para o resultado.html */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Container Principal para o resultado.html */
+.result {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    width: 100%;
+    text-align: center;
+}
+
+/* Estilos dos Display para o resultado.html */
+.sala, .senha, .dr {
+    font-size: 28px;
+    color: #007bff;
+    margin-bottom: 30px;
+    font-weight: bold;
+}
+
+/* Estilo do Áudio (Oculto) */
+audio {
+    display: none;
+}
+
+/* Personalização do Texto no resultado.html */
+.sala {
+    font-size: 50px;
+}
+
+.senha {
+    font-size: 80px;
+}
+
+.dr {
+    font-size: 80px;
+}
+
+/* Estilos Gerais para o index.html */
 body {
     font-family: Arial, sans-serif;
 }
@@ -35,6 +85,7 @@ body {
     background-color: #28a745;
 }
 
+/* Estilo adicional para o index.html */
 .result {
     text-align: center;
     margin-top: 20px;
@@ -42,10 +93,6 @@ body {
 
 .sala, .senha, .dr {
     margin: 10px 0;
-}
-
-.ultimas-senhas {
-    margin-top: 20px;
 }
 
 .senha-item {
