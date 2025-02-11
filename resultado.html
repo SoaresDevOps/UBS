@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resultado</title>
     <link rel="stylesheet" href="style.css">
+
+    <!-- Adicionando a biblioteca ResponsiveVoice -->
+    <script src="https://code.responsivevoice.org/responsivevoice.js?key=idn3A29C"></script>
 </head>
 <body>
     <div class="result">
@@ -12,19 +15,18 @@
             <div id="resultado"></div>
         </div>
         <div class="ultimas-senhas" id="ultimasSenhas">
-            <!-- As últimas senhas chamadas aparecerão aqui -->
+            <!-- Últimas senhas chamadas aparecerão aqui -->
         </div>
         <!-- Elemento de áudio para reprodução -->
         <audio id="audio" src="som_senha.mp3"></audio>
     </div>
 
-    <!-- Firebase App -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-analytics.js";
         import { getDatabase, ref, onChildAdded } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-database.js";
 
-        // Your web app's Firebase configuration
+        // Configuração do Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyAhDIHl443t9KNOXVY-E2uMy7cIq7JCsKI",
             authDomain: "posto-de-saude-42845.firebaseapp.com",
@@ -35,7 +37,7 @@
             measurementId: "G-3WVR8L3X7D"
         };
 
-        // Initialize Firebase
+        // Inicializa o Firebase
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
         const database = getDatabase(app);
@@ -80,13 +82,13 @@
                 ultimasSenhasDiv.appendChild(senhaItem);
             });
 
-            // Reproduz o som
+            // Reproduz o som de alerta
             const audio = document.getElementById('audio');
             audio.play();
 
-            // A função de síntese de voz
-            const msg = new SpeechSynthesisUtterance(`Paciente número ${dados.senha}, ir para ${dados.sala}`);
-            window.speechSynthesis.speak(msg);
+            // 🔊 Faz a chamada usando o ResponsiveVoice
+            const mensagem = `Paciente número ${dados.senha}, ir para ${dados.sala}`;
+            responsiveVoice.speak(mensagem, "Brazilian Portuguese Female", {rate: 0.9});
         }
 
         // Recupera dados do Firebase Realtime Database
