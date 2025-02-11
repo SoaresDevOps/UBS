@@ -88,7 +88,7 @@
 
         // 🔊 Quando o áudio terminar, chama a voz
         audio.onended = function() {
-            const mensagem = `Paciente número ${dados.senha}, ir para ${dados.sala}`;
+            const mensagem = `Paciente ${dados.senha}, ir para ${dados.sala}`;
             responsiveVoice.speak(mensagem, "Brazilian Portuguese Female", {rate: 0.9});
         };
     }
