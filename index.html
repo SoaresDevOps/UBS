@@ -88,6 +88,12 @@
             document.getElementById('senha').value = '';
             document.getElementById('dr').selectedIndex = 0;
         });
+
+        // Função para falar a senha e o Dr(a)
+        function falarSenha(dados) {
+            const mensagem = new SpeechSynthesisUtterance(`Senha número ${dados.senha} chamada para o Dr(a) ${dados.dr}`);
+            speechSynthesis.speak(mensagem);
+        }
     </script>
 </body>
 </html>
