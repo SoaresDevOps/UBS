@@ -71,7 +71,6 @@
 
             localStorage.setItem('ultimasSenhas', JSON.stringify(ultimasSenhas));
 
-        
             const ultimasSenhasDiv = document.getElementById('ultimasSenhas');
             ultimasSenhasDiv.innerHTML = '';
             ultimasSenhas.forEach(item => {
@@ -81,8 +80,13 @@
                 ultimasSenhasDiv.appendChild(senhaItem);
             });
 
+            // Reproduz o som
             const audio = document.getElementById('audio');
             audio.play();
+
+            // A função de síntese de voz
+            const msg = new SpeechSynthesisUtterance(`Paciente número ${dados.senha}, ir para ${dados.sala}`);
+            window.speechSynthesis.speak(msg);
         }
 
         // Recupera dados do Firebase Realtime Database
