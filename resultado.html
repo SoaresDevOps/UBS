@@ -43,14 +43,14 @@
     const database = getDatabase(app);
 
     const cores = {
-        "Jane": "#ff0000",
-        "Luanna": "#0000ff",
-        "Osmair": "#008000",
-        "Amanda": "#ffa500",
-        "Arthur": "#800080",
-        "Andreia": "#ff00ff",
-        "Fernando Viola": "#0000ff",
-        "Luiz Alberto": "#ff0000"
+        "Jane": "#007bff",
+        "Luanna": "#007bff",
+        "Osmair": "#007bff",
+        "Amanda": "#007bff",
+        "Arthur": "#007bff",
+        "Andreia": "#007bff",
+        "Fernando Viola": "#007bff",
+        "Luiz Alberto": "#007bff"
     };
 
     // Função para atualizar os dados
@@ -65,22 +65,6 @@
                 </div>
             </div>`;
 
-        let ultimasSenhas = JSON.parse(localStorage.getItem('ultimasSenhas')) || [];
-        ultimasSenhas.push({ senha: dados.senha, dr: dados.dr });
-        if (ultimasSenhas.length > 5) {
-            ultimasSenhas.shift();
-        }
-
-        localStorage.setItem('ultimasSenhas', JSON.stringify(ultimasSenhas));
-
-        const ultimasSenhasDiv = document.getElementById('ultimasSenhas');
-        ultimasSenhasDiv.innerHTML = '';
-        ultimasSenhas.forEach(item => {
-            const senhaItem = document.createElement('div');
-            senhaItem.classList.add('senha-item');
-            senhaItem.textContent = `Paceinte: ${item.senha} - Dr(a): ${item.dr}`;
-            ultimasSenhasDiv.appendChild(senhaItem);
-        });
 
         // Reproduz o som de alerta primeiro
         const audio = document.getElementById('audio');
