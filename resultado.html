@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resultado</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Adicionando a biblioteca ResponsiveVoice -->
     <script src="https://code.responsivevoice.org/responsivevoice.js?key=idn3A29C"></script>
 </head>
 <body>
@@ -16,8 +15,7 @@
         <div class="ultimas-senhas" id="ultimasSenhas">
             <!-- Últimas senhas chamadas aparecerão aqui -->
         </div>
-        <!-- Elemento de áudio para reprodução -->
-        <audio id="audio" src="som_senha.mp3" autoplay muted></audio>
+        <audio id="audio" src="som_senha.mp3" autoplay></audio>
     </div>
 
 <script type="module">
@@ -25,7 +23,6 @@
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-analytics.js";
     import { getDatabase, ref, onChildAdded } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-database.js";
 
-    // Configuração do Firebase
     const firebaseConfig = {
         apiKey: "AIzaSyAhDIHl443t9KNOXVY-E2uMy7cIq7JCsKI",
         authDomain: "posto-de-saude-42845.firebaseapp.com",
@@ -36,23 +33,11 @@
         measurementId: "G-3WVR8L3X7D"
     };
 
-    // Inicializa o Firebase
     const app = initializeApp(firebaseConfig);
     const analytics = getAnalytics(app);
     const database = getDatabase(app);
 
-    const cores = {
-        "Jane": "#007bff",
-        "Luanna": "#007bff",
-        "Osmair": "#007bff",
-        "Amanda": "#007bff",
-        "Arthur": "#007bff",
-        "Andreia": "#007bff",
-        "Fernando Viola": "#007bff",
-        "Luiz Alberto": "#007bff"
-    };
-
-    // Função para atualizar os dados
+    // Função para atualizar os dados e reproduzir o áudio e a fala
     function atualizarDados(dados) {
         const resultadoDiv = document.getElementById('resultado');
         resultadoDiv.innerHTML = 
@@ -60,7 +45,7 @@
                 <div>
                     <p class="sala" style="font-size: 50px">Sala: ${dados.sala}</p>
                     <p style="font-size: 80px;">Paciente: ${dados.senha}</p>
-                    <p class="dr" style="color: ${cores[dados.dr]}; font-size: 80px">Dr(a): ${dados.dr}</p>
+                    <p class="dr" style="color: #007bff; font-size: 80px">Dr(a): ${dados.dr}</p>
                 </div>
             </div>`;
 
@@ -80,7 +65,6 @@
             };
         }).catch((error) => {
             console.error("Erro ao reproduzir o áudio:", error);
-            // Tentar novamente ou fornecer feedback ao usuário
         });
     }
 
