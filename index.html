@@ -21,7 +21,7 @@
                 </select>
             </div>
             <div class="form-group">
-                <label for="senha">Senha:</label>
+                <label for="senha">Paciente:</label>
                 <input type="text" class="form-control" id="senha" name="senha" required>
             </div>
             <div class="form-group">
@@ -91,7 +91,7 @@
 
         // Função para falar a senha e o Dr(a)
         function falarSenha(dados) {
-            const mensagem = new SpeechSynthesisUtterance(`Senha número ${dados.senha} chamada para o Dr(a) ${dados.dr}`);
+            const mensagem = new SpeechSynthesisUtterance(`Paciente ${dados.senha} ir para ${dados.dr}`);
             speechSynthesis.speak(mensagem);
         }
     </script>
