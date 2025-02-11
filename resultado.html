@@ -21,90 +21,93 @@
         <audio id="audio" src="som_senha.mp3"></audio>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-analytics.js";
-        import { getDatabase, ref, onChildAdded } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-database.js";
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-analytics.js";
+    import { getDatabase, ref, onChildAdded } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-database.js";
 
-        // Configuração do Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyAhDIHl443t9KNOXVY-E2uMy7cIq7JCsKI",
-            authDomain: "posto-de-saude-42845.firebaseapp.com",
-            projectId: "posto-de-saude-42845",
-            storageBucket: "posto-de-saude-42845.appspot.com",
-            messagingSenderId: "414153607163",
-            appId: "1:414153607163:web:34eb3c8199f70678786d5e",
-            measurementId: "G-3WVR8L3X7D"
-        };
+    // Configuração do Firebase
+    const firebaseConfig = {
+        apiKey: "AIzaSyAhDIHl443t9KNOXVY-E2uMy7cIq7JCsKI",
+        authDomain: "posto-de-saude-42845.firebaseapp.com",
+        projectId: "posto-de-saude-42845",
+        storageBucket: "posto-de-saude-42845.appspot.com",
+        messagingSenderId: "414153607163",
+        appId: "1:414153607163:web:34eb3c8199f70678786d5e",
+        measurementId: "G-3WVR8L3X7D"
+    };
 
-        // Inicializa o Firebase
-        const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
-        const database = getDatabase(app);
+    // Inicializa o Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const database = getDatabase(app);
 
-        const cores = {
-            "Jane": "#ff0000",
-            "Luanna": "#0000ff",
-            "Osmair": "#008000",
-            "Amanda": "#ffa500",
-            "Arthur": "#800080",
-            "Andreia": "#ff00ff",
-            "Fernando Viola": "#0000ff",
-            "Luiz Alberto": "#ff0000"
-        };
+    const cores = {
+        "Jane": "#ff0000",
+        "Luanna": "#0000ff",
+        "Osmair": "#008000",
+        "Amanda": "#ffa500",
+        "Arthur": "#800080",
+        "Andreia": "#ff00ff",
+        "Fernando Viola": "#0000ff",
+        "Luiz Alberto": "#ff0000"
+    };
 
-        // Função para atualizar os dados
-        function atualizarDados(dados) {
-            const resultadoDiv = document.getElementById('resultado');
-            resultadoDiv.innerHTML = 
-                `<div class="text">
-                    <div>
-                        <p class="sala" style="font-size: 50px">Sala: ${dados.sala}</p>
-                        <p style="font-size: 80px;">Senha: N° ${dados.senha}</p>
-                        <p class="dr" style="color: ${cores[dados.dr]}; font-size: 80px">Dr(a): ${dados.dr}</p>
-                    </div>
-                </div>`;
+    // Função para atualizar os dados
+    function atualizarDados(dados) {
+        const resultadoDiv = document.getElementById('resultado');
+        resultadoDiv.innerHTML = 
+            `<div class="text">
+                <div>
+                    <p class="sala" style="font-size: 50px">Sala: ${dados.sala}</p>
+                    <p style="font-size: 80px;">Senha: N° ${dados.senha}</p>
+                    <p class="dr" style="color: ${cores[dados.dr]}; font-size: 80px">Dr(a): ${dados.dr}</p>
+                </div>
+            </div>`;
 
-            let ultimasSenhas = JSON.parse(localStorage.getItem('ultimasSenhas')) || [];
-            ultimasSenhas.push({ senha: dados.senha, dr: dados.dr });
-            if (ultimasSenhas.length > 5) {
-                ultimasSenhas.shift();
-            }
-
-            localStorage.setItem('ultimasSenhas', JSON.stringify(ultimasSenhas));
-
-            const ultimasSenhasDiv = document.getElementById('ultimasSenhas');
-            ultimasSenhasDiv.innerHTML = '';
-            ultimasSenhas.forEach(item => {
-                const senhaItem = document.createElement('div');
-                senhaItem.classList.add('senha-item');
-                senhaItem.textContent = `Senha N° ${item.senha} - Dr(a): ${item.dr}`;
-                ultimasSenhasDiv.appendChild(senhaItem);
-            });
-
-            // Reproduz o som de alerta
-            const audio = document.getElementById('audio');
-            audio.play();
-
-            // 🔊 Faz a chamada usando o ResponsiveVoice
-            const mensagem = `Paciente número ${dados.senha}, ir para ${dados.sala}`;
-            responsiveVoice.speak(mensagem, "Brazilian Portuguese Female", {rate: 0.9});
+        let ultimasSenhas = JSON.parse(localStorage.getItem('ultimasSenhas')) || [];
+        ultimasSenhas.push({ senha: dados.senha, dr: dados.dr });
+        if (ultimasSenhas.length > 5) {
+            ultimasSenhas.shift();
         }
 
-        // Recupera dados do Firebase Realtime Database
-        const senhasRef = ref(database, 'senhas');
-        onChildAdded(senhasRef, (snapshot) => {
-            const dados = snapshot.val();
-            atualizarDados(dados);
+        localStorage.setItem('ultimasSenhas', JSON.stringify(ultimasSenhas));
+
+        const ultimasSenhasDiv = document.getElementById('ultimasSenhas');
+        ultimasSenhasDiv.innerHTML = '';
+        ultimasSenhas.forEach(item => {
+            const senhaItem = document.createElement('div');
+            senhaItem.classList.add('senha-item');
+            senhaItem.textContent = `Senha N° ${item.senha} - Dr(a): ${item.dr}`;
+            ultimasSenhasDiv.appendChild(senhaItem);
         });
 
-        window.onload = function() {
-            let dados = localStorage.getItem('dadosFormulario');
-            if (dados) {
-                dados = JSON.parse(dados);
-                atualizarDados(dados);
-            }
+        // Reproduz o som de alerta primeiro
+        const audio = document.getElementById('audio');
+        audio.play();
+
+        // 🔊 Quando o áudio terminar, chama a voz
+        audio.onended = function() {
+            const mensagem = `Paciente número ${dados.senha}, ir para ${dados.sala}`;
+            responsiveVoice.speak(mensagem, "Brazilian Portuguese Female", {rate: 0.9});
         };
-    </script>
+    }
+
+    // Recupera dados do Firebase Realtime Database
+    const senhasRef = ref(database, 'senhas');
+    onChildAdded(senhasRef, (snapshot) => {
+        const dados = snapshot.val();
+        atualizarDados(dados);
+    });
+
+    window.onload = function() {
+        let dados = localStorage.getItem('dadosFormulario');
+        if (dados) {
+            dados = JSON.parse(dados);
+            atualizarDados(dados);
+        }
+    };
+</script>
+
 </body>
 </html>
