@@ -5,9 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resultado</title>
     <link rel="stylesheet" href="style.css">
-
-    <!-- Adicionando a biblioteca ResponsiveVoice -->
-    <script src="https://code.responsivevoice.org/responsivevoice.js?key=idn3A29C"></script>
 </head>
 <body>
     <div class="result">
@@ -78,7 +75,7 @@
         ultimasSenhas.forEach(item => {
             const senhaItem = document.createElement('div');
             senhaItem.classList.add('senha-item');
-            senhaItem.textContent = `Paceinte: ${item.senha} - Dr(a): ${item.dr}`;
+            senhaItem.textContent = `Paciente: ${item.senha} - Dr(a): ${item.dr}`;
             ultimasSenhasDiv.appendChild(senhaItem);
         });
 
@@ -86,10 +83,16 @@
         const audio = document.getElementById('audio');
         audio.play();
 
-        // 🔊 Quando o áudio terminar, chama a voz
+        // 🔊 Quando o áudio terminar, chama a voz nativa do navegador
         audio.onended = function() {
             const mensagem = `Paciente ${dados.senha}, ir para ${dados.sala}`;
-            responsiveVoice.speak(mensagem, "Brazilian Portuguese Female", {rate: 0.9});
+
+            // Usando o SpeechSynthesis para sintetizar a voz
+            const synth = window.speechSynthesis;
+            const utterance = new SpeechSynthesisUtterance(mensagem);
+            utterance.lang = "pt-BR";
+            utterance.rate = 0.9; // Ajusta a velocidade da fala
+            synth.speak(utterance);
         };
     }
 
