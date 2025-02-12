@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resultado</title>
     <link rel="stylesheet" href="style.css">
+
+    <!-- Adicionando a biblioteca ResponsiveVoice -->
     <script src="https://code.responsivevoice.org/responsivevoice.js?key=idn3A29C"></script>
 </head>
 <body>
@@ -15,7 +17,8 @@
         <div class="ultimas-senhas" id="ultimasSenhas">
             <!-- Últimas senhas chamadas aparecerão aqui -->
         </div>
-        <audio id="audio" src="som_senha.mp3" autoplay></audio>
+        <!-- Elemento de áudio para reprodução -->
+        <audio id="audio" src="som_senha.mp3"></audio>
     </div>
 
 <script type="module">
@@ -23,6 +26,7 @@
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-analytics.js";
     import { getDatabase, ref, onChildAdded } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-database.js";
 
+    // Configuração do Firebase
     const firebaseConfig = {
         apiKey: "AIzaSyAhDIHl443t9KNOXVY-E2uMy7cIq7JCsKI",
         authDomain: "posto-de-saude-42845.firebaseapp.com",
@@ -33,11 +37,23 @@
         measurementId: "G-3WVR8L3X7D"
     };
 
+    // Inicializa o Firebase
     const app = initializeApp(firebaseConfig);
     const analytics = getAnalytics(app);
     const database = getDatabase(app);
 
-    // Função para atualizar os dados e reproduzir o áudio e a fala
+    const cores = {
+        "Jane": "#ff0000",
+        "Luanna": "#0000ff",
+        "Osmair": "#008000",
+        "Amanda": "#ffa500",
+        "Arthur": "#800080",
+        "Andreia": "#ff00ff",
+        "Fernando Viola": "#0000ff",
+        "Luiz Alberto": "#ff0000"
+    };
+
+    // Função para atualizar os dados
     function atualizarDados(dados) {
         const resultadoDiv = document.getElementById('resultado');
         resultadoDiv.innerHTML = 
@@ -45,27 +61,36 @@
                 <div>
                     <p class="sala" style="font-size: 50px">Sala: ${dados.sala}</p>
                     <p style="font-size: 80px;">Paciente: ${dados.senha}</p>
-                    <p class="dr" style="color: #007bff; font-size: 80px">Dr(a): ${dados.dr}</p>
+                    <p class="dr" style="color: ${cores[dados.dr]}; font-size: 80px">Dr(a): ${dados.dr}</p>
                 </div>
             </div>`;
 
+        let ultimasSenhas = JSON.parse(localStorage.getItem('ultimasSenhas')) || [];
+        ultimasSenhas.push({ senha: dados.senha, dr: dados.dr });
+        if (ultimasSenhas.length > 5) {
+            ultimasSenhas.shift();
+        }
+
+        localStorage.setItem('ultimasSenhas', JSON.stringify(ultimasSenhas));
+
+        const ultimasSenhasDiv = document.getElementById('ultimasSenhas');
+        ultimasSenhasDiv.innerHTML = '';
+        ultimasSenhas.forEach(item => {
+            const senhaItem = document.createElement('div');
+            senhaItem.classList.add('senha-item');
+            senhaItem.textContent = `Paceinte: ${item.senha} - Dr(a): ${item.dr}`;
+            ultimasSenhasDiv.appendChild(senhaItem);
+        });
+
         // Reproduz o som de alerta primeiro
         const audio = document.getElementById('audio');
-        const playAudio = () => {
-            return new Promise((resolve, reject) => {
-                audio.play().then(resolve).catch(reject);
-            });
-        };
+        audio.play();
 
-        // Lidar com a reprodução do áudio e chamar a voz após a reprodução do áudio
-        playAudio().then(() => {
-            audio.onended = function() {
-                const mensagem = `Paciente ${dados.senha}, ir para ${dados.sala}`;
-                responsiveVoice.speak(mensagem, "Brazilian Portuguese Female", {rate: 0.9});
-            };
-        }).catch((error) => {
-            console.error("Erro ao reproduzir o áudio:", error);
-        });
+        // 🔊 Quando o áudio terminar, chama a voz
+        audio.onended = function() {
+            const mensagem = `Paciente ${dados.senha}, ir para ${dados.sala}`;
+            responsiveVoice.speak(mensagem, "Brazilian Portuguese Female", {rate: 0.9});
+        };
     }
 
     // Recupera dados do Firebase Realtime Database
